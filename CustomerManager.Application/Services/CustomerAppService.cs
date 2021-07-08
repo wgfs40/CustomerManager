@@ -24,6 +24,11 @@ namespace CustomerManager.Application.Services
             return _mapper.Map<IEnumerable<CustomerViewModel>>(await _customerRepository.GetAllCustomer());
         }
 
+        public async Task<IEnumerable<CustomerViewModel>> CustomerSearch(string search)
+        {
+            return _mapper.Map<IEnumerable<CustomerViewModel>>(await _customerRepository.CustomerSearch(search));
+        }
+
         public async Task<CustomerViewModel> GetById(int CustomerId)
         {
             return _mapper.Map<CustomerViewModel>(await _customerRepository.GetCustomerByCustomerId(CustomerId));
@@ -62,5 +67,7 @@ namespace CustomerManager.Application.Services
         {
             GC.SuppressFinalize(this);
         }
+
+       
     }
 }

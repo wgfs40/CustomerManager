@@ -42,6 +42,11 @@ namespace CustomerManager.Infrastructure.Repository
         {            
             return await DbSet.Where(c => c.CustomerId ==  CustomerId).Include(c => c.Addresses).FirstOrDefaultAsync();
         }
+        public async Task<IEnumerable<Customer>> CustomerSearch(string search)
+        {
+            return await DbSet.Where(c => c.FirstName.Contains(search) || c.LastName.Contains(search)).ToListAsync();
+        }
+
 
         public void UpdateCustomer(Customer customer)
         {

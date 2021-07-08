@@ -11,6 +11,7 @@ namespace CustomerManager.Domain.Interfaces
         void UpdateCustomer(Customer customer);
         void DeleteCustomer(Customer customer);
         Task<IEnumerable<Customer>> GetAllCustomer();
+        Task<IEnumerable<Customer>> CustomerSearch(string search);
         Task<Customer> GetCustomerByCustomerId(int CustomerId);
         Task<Customer> GetCustomerAddressByCustomerId(int CustomerId);
         Task<bool> Save();

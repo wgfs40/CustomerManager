@@ -17,10 +17,19 @@ namespace CustomerManager.Web.Controllers
             _customerAppService = customerAppService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search)
         {
-            var result = await _customerAppService.GetAll();
-            return View(result);
+            if (string.IsNullOrEmpty(search))
+            {
+                var result = await _customerAppService.GetAll();
+                return View(result);
+            }
+            else
+            {
+                var result = await _customerAppService.CustomerSearch(search);
+                return View(result);
+            }
+           
         }
 
         public IActionResult RegisterCustomer()
