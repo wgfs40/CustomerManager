@@ -1,0 +1,135 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="row">
+    <div class="col">
+        <!--registrar cliente -->
+
+        <div class="form-group">
+            <label for="firstName">Nombre</label>
+            <input type="text" class="form-control" id="firstName" placeholder="Introduzca el nombre del cliente">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Apellido</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Introduzca el apellido del cliente">
+        </div>
+        <div class="form-group">
+            <label for="phone">Telefono</label>
+            <input type="text" class="form-control" id="phone" placeholder="Introduzca el telefono del cliente">
+        </div>
+        <button type="button" id="customerSave" class="btn btn-primary">Guardar</button>
+
+    </div>
+    <div class="col">
+        <!--registrar direccion-->
+        <div id="address">
+            <div class="form-group">
+                <label for="street">Calle</label>
+                <input type="text" class="form-control" id="street" placeholder="Introduzca la calle">
+            </div>
+            <div class="form-group">
+                <label for="numberAparment">Numero de apartamento</label>
+                <input type="text" class="form-control" id="numberAparment" placeholder="Introduzca el numero del apartamento">
+            </div>
+
+            <button id="addAddress" type="button" class="btn btn-dark">Agregar Direccion</button>
+        </div>
+        <div id="AddresResult">
+            <table id="addresstbl" class="table">
+                <tr>
+                    <th>Calle</th>
+                    <th>No. Apartamento</th>
+                    <th></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        var addrreses = [];
+        $(function () {            
+            $("#AddresResult").hide();
+
+            $("#addAddress").click(function () {
+                var address = {
+                    street: $("#street").val(),
+                    numberAparment: $("#numberAparment").val()
+                }
+                addrreses.push(address);
+
+                $("#street").val("");
+                $("#numberAparment").val("");
+
+                loadAddressTable();
+
+            });
+
+            $("#customerSave").click(function () {
+                var customer = {
+                    firstName: $("#firstName").val(),
+                    lastName: $("#lastName").val(),
+                    phoneNumber: $("#phone").val(),
+                    addresses: addrreses
+                };
+
+                Save(customer);
+            });            
+        })
+
+        function Save(objCustomer) {
+            $.ajax({
+                url: "@Url.Action("RegisterCustomer", "Customer")",
+                data: objCustomer,
+                type: 'POST',
+                success: function (json) {
+                    alert(json.message);
+                    Clean();
+                }, error: function (xhr, status) {
+                    alert('Disculpe, existió un problema ');
+                }
+            });
+        }
+        function Clean() {
+            $("#firstName").val("");
+            $("#lastName").val("");
+            $("#phone").val("");
+            $("#firstName").focus();
+            addrreses = [];
+        }
+        function deleteAddress(index) {
+            debugger;
+            addrreses = jQuery.grep(addrreses, function (value,i) {
+                return i !== index;
+            });
+
+            loadAddressTable();
+        }
+        function loadAddressTable() {
+
+
+            if (addrreses.length > 0) {
+                $("#AddresResult").show();
+
+                var table = $("#addresstbl tbody");
+
+                var row = "";
+
+                for (var i = 0; i < addrreses.length; i++) {
+
+                    row += "<tr><td>" + addrreses[i].street + "</td><td>" + addrreses[i].numberAparment + "</td><td><a href='#' onclick='return deleteAddress(" + i + ");'> <i class='material-icons' style='color: red; '> delete</i ></a></td></tr>";
+                }
+                table.children().remove("tr");
+                table.append(row);
+            } else {
+                $("#AddresResult").hide();
+            }
+        }
+        
+    </script>
+}
+

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CustomerManager.Application.ViewModels.CustomerViewModel>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<br />
+<div class="form-control-sm mb-5 p-0">
+    @Html.ActionLink("Agregar Nuevo Cliente", "RegisterCustomer", "Customer", null, new { @class = "btn btn-success" })
+</div>
+
+<div class="mb-3">
+    <div class="row">
+        <div class="col pl-2">
+            <input class="form-control" id="search" placeholder="Buscar cliente" />
+        </div>
+        <div class="col pl-1">
+            <button type="button" class="btn btn-secondary">Buscar</button>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped table-bordered table-sm p-0" cellspacing="0" width="100%">
+    <tr>
+        <th>Codigo Cliente</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CustomerId</td>
+            <td>@item.FirstName</td>
+            <td>@item.LastName</td>
+            <td align="center">
+                <a href="/Customer/UpdateCustomer?CustomerId=@item.CustomerId" class="pr-4">
+                    <i class="material-icons" style="color:cornflowerblue;">
+                        edit
+                    </i>
+                </a>
+                <a href="/Customer/DeleteCustomer?CustomerId=@item.CustomerId">
+                    <i class="material-icons" style="color:red;">
+                        delete
+                    </i>
+                </a>
+            </td>
+        </tr>
+    }
+
+</table>
