@@ -15,6 +15,7 @@ namespace CustomerManager.Infrastructure.IoC
         {
             //app services            
             services.AddScoped<ICustomerAppService, CustomerAppService>();
+            services.AddScoped<IAddressAppService, AddressAppService>();
 
             // Infra - Data
             services.AddScoped<ICustomerRepository, CustomerRepository>();

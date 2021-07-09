@@ -129,12 +129,27 @@
         }
 
         function deleteAddress(index) {
-            debugger;
-            addrreses = jQuery.grep(addrreses, function (value,i) {
-                return i !== index;
-            });
 
-            loadAddressTable();
+            if (confirm("Desea eliminar la direcion?")) {
+                var addressId = addrreses[index].addressId;
+                $.ajax({
+                    url: "@Url.Action("DeleteAddress", "Customer")",
+                    data: { addressId: addressId},
+                    type: 'POST',
+                    success: function (json) {
+                        alert(json.message);
+
+                        addrreses = jQuery.grep(addrreses, function (value, i) {
+                            return i !== index;
+                        });
+
+                        loadAddressTable();
+
+                    }, error: function (xhr, status) {
+                        alert('Disculpe, existió un problema ');
+                    }
+                });
+            }
         }
 
         function getAddress(index) {
@@ -142,7 +157,7 @@
             $("#numberAparment").val(addrreses[index].numberAparment);
             $("#addressId").val(addrreses[index].addressId);
             $("#indexadress").val(index);
-            
+
         }
 
         function loadAddressTable() {

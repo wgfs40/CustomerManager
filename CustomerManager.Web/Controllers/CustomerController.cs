@@ -11,10 +11,12 @@ namespace CustomerManager.Web.Controllers
     public class CustomerController : Controller
     {
         private readonly ICustomerAppService _customerAppService;
+        private readonly IAddressAppService _addressAppService;
 
-        public CustomerController(ICustomerAppService customerAppService)
+        public CustomerController(ICustomerAppService customerAppService, IAddressAppService addressAppService)
         {
             _customerAppService = customerAppService;
+            _addressAppService = addressAppService;
         }
 
         public async Task<IActionResult> Index(string search)
@@ -83,6 +85,21 @@ namespace CustomerManager.Web.Controllers
         {
             var customer = await _customerAppService.Remove(customerId);
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAddress(int addressId)
+        {
+            var result = await _addressAppService.Remove(addressId);
+            if (result)
+            {
+                return Json(new { message = "Direccion eleminada correctamente."});
+            }
+            else
+            {
+                return Json(new { message = "Ha pasado algo, favor de revisar." });
+            }
+            
         }
     }
 }
