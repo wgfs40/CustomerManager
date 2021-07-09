@@ -3,6 +3,12 @@
 *@
 @{
 }
+
+<div id="error" class="alert alert-danger">
+    <ul id="errorlist">
+
+    </ul>
+</div>
 <div class="row">
     <div class="col">
         <!--registrar cliente -->
@@ -54,11 +60,21 @@
         var addrreses = [];
         $(function () {            
             $("#AddresResult").hide();
+            $("#error").hide();
 
             $("#addAddress").click(function () {
+
+                var street = $("#street").val();
+                var apartment = $("#numberAparment").val();
+
+                if (street === "" || apartment === "") {
+                    alert("la informacion de la direccion no pueden esta vacia.");
+                    return;
+                }
+
                 var address = {
-                    street: $("#street").val(),
-                    numberAparment: $("#numberAparment").val()
+                    street: street,
+                    numberAparment: apartment
                 }
                 addrreses.push(address);
 
@@ -78,7 +94,11 @@
                 };
 
                 Save(customer);
-            });            
+            });
+
+            $("#error").click(function () {
+                $("#error").hide();
+            });
         })
 
         function Save(objCustomer) {
@@ -87,8 +107,22 @@
                 data: objCustomer,
                 type: 'POST',
                 success: function (json) {
-                    alert(json.message);
-                    Clean();
+                    debugger;
+                    if (json.success) {
+                        alert(json.message);
+                        location.href = "/";
+                    } else {
+                        $("#error").show();
+
+                        var errors = json.message;
+                        $("#errorlist").children().remove("li");
+                        for (var i = 0; i < errors.length; i++) {
+                            $("#errorlist").append("<li>" + errors[i] + "</li>");
+                        }
+
+                        
+                    }
+                   
                 }, error: function (xhr, status) {
                     alert('Disculpe, existió un problema ');
                 }

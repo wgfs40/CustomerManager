@@ -42,14 +42,27 @@ namespace CustomerManager.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterCustomer(CustomerViewModel customerViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                var message = new List<string>();
+                foreach (var item in ModelState.Values)
+                {
+                    foreach (var error in item.Errors)
+                    {
+                        message.Add(error.ErrorMessage);
+                    }
+                }
+
+                return Json(new { message , success = false });
+            }
            var resul = await _customerAppService.Register(customerViewModel);
             if (resul)
             {
-                return Json(new { message = "Cliente resgitrado con exito." });
+                return Json(new { message = "Cliente resgitrado con exito.",success = true });
             }
             else
             {
-                return Json(new { message = "Al ha pasado." });
+                return Json(new { message = "Al ha pasado.", success = false });
             }
             
         }
@@ -67,10 +80,12 @@ namespace CustomerManager.Web.Controllers
             var result = await _customerAppService.Update(customerViewModel);
             if (result)
             {
-                return RedirectToAction("Index");
+                return Json(new { message = "Actualizacion Completada" });
             }
-
-            return View(customerViewModel);
+            else
+            {
+                return Json(new { message = "Ha pasado algo, favor de verificar." });
+            }
         }
 
         public async Task<IActionResult> DeleteCustomer(int customerId)

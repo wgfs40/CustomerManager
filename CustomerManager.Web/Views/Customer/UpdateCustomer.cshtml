@@ -71,10 +71,19 @@
             loadAddressTable();
 
             $("#addAddress").click(function () {
-                var address = {
-                    street: $("#street").val(),
-                    numberAparment: $("#numberAparment").val()
+                var street = $("#street").val();
+                var apartment = $("#numberAparment").val();
+
+                if (street === "" || apartment === "") {
+                    alert("la informacion de la direccion no pueden esta vacia.");
+                    return;
                 }
+
+                var address = {
+                    street: street,
+                    numberAparment: apartment
+                }
+
                 addrreses.push(address);
 
                 $("#street").val("");
@@ -85,10 +94,17 @@
             });
 
             $("#updateAddress").click(function () {
-                debugger;
+                var street = $("#street").val();
+                var apartment = $("#numberAparment").val();
+
+                if (street === "" || apartment === "") {
+                    alert("la informacion de la direccion no pueden esta vacia.");
+                    return;
+                }
+
                 var index = $("#indexadress").val();
-                addrreses[index].street = $("#street").val();
-                addrreses[index].numberAparment = $("#numberAparment").val();
+                addrreses[index].street = street;
+                addrreses[index].numberAparment = apartment;
 
                 loadAddressTable();
             });
@@ -113,7 +129,7 @@
                 type: 'POST',
                 success: function (json) {
                     alert(json.message);
-                    Clean();
+                    location.href = "/";
                 }, error: function (xhr, status) {
                     alert('Disculpe, existió un problema ');
                 }
